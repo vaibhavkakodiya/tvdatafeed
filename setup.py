@@ -1,10 +1,9 @@
-from setuptools import setup
-
-from tvDatafeed import __version__
+from setuptools import setup, find_packages
+from version import VERSION
 
 setup(
     name='tvDatafeed',
-    version=__version__,
+    version=VERSION,
 
     url='https://github.com/vaibhavkakodiya/tvdatafeed.git',
     author='vaibhav kakodiya',
@@ -12,10 +11,17 @@ setup(
 
     py_modules=['TvDatafeed'],
 
-    install_requires=[
-    'returns-decorator',
+    setup_requires=[
     'pandas',
     'websocket-client==1.3.1',
     'requests==2.31.0'
-],
+    ],
+
+    install_requires=[
+    'pandas',
+    'websocket-client==1.3.1',
+    'requests==2.31.0'
+    ],
+
+    packages=find_packages()
 )
