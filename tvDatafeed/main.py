@@ -28,10 +28,20 @@ class Interval(enum.Enum):
     in_weekly = "1W"
     in_monthly = "1M"
 
+class SymbolType(enum.Enum):
+    All = "undefined"
+    Stocks = "stocks"
+    Funds = "funds"
+    Futures = "futures"
+    Forex = "forex"
+    Crypto = "crypto"
+    Indices = "index"
+    Bonds = "bond"
+    Economy = "economic"
 
 class TvDatafeed:
     __sign_in_url = 'https://www.tradingview.com/accounts/signin/'
-    __search_url = 'https://symbol-search.tradingview.com/symbol_search/?text={}&hl=1&exchange={}&lang=en&type=&domain=production'
+    __search_url = 'https://symbol-search.tradingview.com/symbol_search/v3/?text={symbol}&hl=1&exchange={exchange}&lang=en&search_type={type}&domain=production&sort_by_country=IN'
     __ws_headers = json.dumps({"Origin": "https://data.tradingview.com"})
     __signin_headers = {'Referer': 'https://www.tradingview.com'}
     __ws_timeout = 5
@@ -289,8 +299,8 @@ class TvDatafeed:
 
         return self.__create_df(raw_data, symbol)
 
-    def search_symbol(self, text: str, exchange: str = ''):
-        url = self.__search_url.format(text, exchange)
+    def search_symbol(self, text: str, exchange: str = '', type: SymbolType = SymbolType.All):
+        url = self.__search_url.format(symbol = text, exchange = exchange, type = type.value)
 
         symbols_list = []
         try:
@@ -314,7 +324,8 @@ if __name__ == "__main__":
             "EICHERMOT",
             "NSE",
             interval=Interval.in_1_hour,
-            n_bars=500,
+            n_bars=5,
             extended_session=False,
         )
     )
+    print(tv.search_symbol("NIFTY", "NSE", SymbolType.All))
